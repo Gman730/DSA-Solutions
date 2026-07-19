@@ -1,0 +1,24 @@
+18. Dijkstra's Shortest Path
+
+pythonimport heapq
+from collections import defaultdict
+
+def dijkstra(graph, source):
+    # graph: dict of lists of (neighbor, weight)
+    dist = defaultdict(lambda: float('inf'))
+    dist[source] = 0
+    heap = [(0, source)]
+    visited = set()
+
+    while heap:
+        d, u = heapq.heappop(heap)
+        if u in visited:
+            continue
+        visited.add(u)
+        for v, w in graph[u]:
+            if d + w < dist[v]:
+                dist[v] = d + w
+                heapq.heappush(heap, (dist[v], v))
+    return dist
+
+Complexity: O((V+E) log V) with a binary heap.
