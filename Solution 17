@@ -1,0 +1,24 @@
+17. Redundant Connection (Union-Find)
+
+pythondef findRedundantConnection(edges):
+    parent = list(range(len(edges) + 1))
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(x, y):
+        rx, ry = find(x), find(y)
+        if rx == ry:
+            return False
+        parent[rx] = ry
+        return True
+
+    for u, v in edges:
+        if not union(u, v):
+            return [u, v]
+    return []
+
+Complexity: O(n α(n)) time (nearly O(n)), O(n) space.
