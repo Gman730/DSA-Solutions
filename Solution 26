@@ -1,0 +1,26 @@
+26. Word Break II (Return All Sentences)
+
+pythondef wordBreak(s, wordDict):
+    word_set = set(wordDict)
+    memo = {}
+
+    def backtrack(start):
+        if start == len(s):
+            return [""]
+        if start in memo:
+            return memo[start]
+
+        sentences = []
+        for end in range(start + 1, len(s) + 1):
+            word = s[start:end]
+            if word in word_set:
+                for rest in backtrack(end):
+                    sentences.append(word + ("" if rest == "" else " " + rest))
+
+        memo[start] = sentences
+        return sentences
+
+    return backtrack(0)
+
+Complexity: O(n^2 + 2^n) worst case for output-heavy cases; memoization prunes recomputation.
+
