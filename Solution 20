@@ -1,0 +1,24 @@
+20. Kruskal's Minimum Spanning Tree
+
+pythondef kruskalMST(n, edges):  # edges: list of (weight, u, v)
+    edges.sort()
+    parent = list(range(n))
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    mst_weight = 0
+    mst_edges = []
+    for w, u, v in edges:
+        ru, rv = find(u), find(v)
+        if ru != rv:
+            parent[ru] = rv
+            mst_weight += w
+            mst_edges.append((u, v, w))
+
+    return mst_weight, mst_edges
+
+Complexity: O(E log E) time.
