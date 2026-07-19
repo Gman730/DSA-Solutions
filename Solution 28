@@ -1,0 +1,37 @@
+28. Sudoku Solver (Backtracking)
+
+pythondef solveSudoku(board):
+    rows = [set() for _ in range(9)]
+    cols = [set() for _ in range(9)]
+    boxes = [set() for _ in range(9)]
+    empty = []
+
+    for r in range(9):
+        for c in range(9):
+            val = board[r][c]
+            if val == '.':
+                empty.append((r, c))
+            else:
+                rows[r].add(val)
+                cols[c].add(val)
+                boxes[(r//3)*3 + c//3].add(val)
+
+    def backtrack(idx):
+        if idx == len(empty):
+            return True
+        r, c = empty[idx]
+        b = (r//3)*3 + c//3
+        for num in '123456789':
+            if num not in rows[r] and num not in cols[c] and num not in boxes[b]:
+                rows[r].add(num); cols[c].add(num); boxes[b].add(num)
+                board[r][c] = num
+                if backtrack(idx + 1):
+                    return True
+                rows[r].remove(num); cols[c].remove(num); boxes[b].remove(num)
+                board[r][c] = '.'
+        return False
+
+    backtrack(0)
+    return board
+
+Complexity: Exponential worst case, but heavily pruned in practice.
