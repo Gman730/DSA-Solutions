@@ -1,0 +1,35 @@
+9. Alien Dictionary
+
+Problem: Derive character order from a sorted alien word list.
+
+pythonfrom collections import defaultdict, deque
+
+def alienOrder(words):
+    graph = defaultdict(set)
+    indegree = {c: 0 for w in words for c in w}
+
+    for w1, w2 in zip(words, words[1:]):
+        min_len = min(len(w1), len(w2))
+        if w1[:min_len] == w2[:min_len] and len(w1) > len(w2):
+            return ""
+        for c1, c2 in zip(w1, w2):
+            if c1 != c2:
+                if c2 not in graph[c1]:
+                    graph[c1].add(c2)
+                    indegree[c2] += 1
+                break
+
+    queue = deque([c for c in indegree if indegree[c] == 0])
+    order = []
+    while queue:
+        c = queue.popleft()
+        order.append(c)
+        for nxt in graph[c]:
+            indegree[nxt] -= 1
+            if indegree[nxt] == 0:
+                queue.append(nxt)
+
+    return ''.join(order) if len(order) == len(indegree) else ""
+
+Complexity: O(C) where C = total characters across words.
+
